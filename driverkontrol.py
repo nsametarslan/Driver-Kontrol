@@ -17,7 +17,7 @@ def list_drivers(save_to_file=False):
                     "Device ID": device.DeviceID,
                     "Üretici": device.Manufacturer if hasattr(device, 'Manufacturer') else "Bilinmiyor",
                     "Durum": status,
-                    "Sürücü Linki": "Sürücüyü araştır"  # Google arama linki
+                    "Sürücü Linki": "Sürücüyü araştır" 
                 }
                 drivers.append(driver_info)
         
@@ -36,12 +36,10 @@ def list_drivers(save_to_file=False):
 def display_drivers_in_table():
     drivers = list_drivers()
 
-    # Tkinter GUI oluşturma
     root = tk.Tk()
     root.title("Bilgisayar Sürücüleri")
     root.geometry("1000x500")
 
-    # Arama çubuğu oluşturma
     search_frame = tk.Frame(root)
     search_frame.pack(fill="x", padx=10, pady=5)
 
@@ -51,16 +49,13 @@ def display_drivers_in_table():
     search_entry = tk.Entry(search_frame)
     search_entry.pack(side="left", fill="x", expand=True, padx=5)
 
-    # Treeview tablo oluşturma
     columns = ("Cihaz", "Device ID", "Üretici", "Durum", "Sürücü Linki")
     tree = ttk.Treeview(root, columns=columns, show="headings")
 
-    # Sütun başlıkları ekleme
     for col in columns:
         tree.heading(col, text=col)
         tree.column(col, width=200)
 
-    # Sürücü bilgilerini tabloya ekleme
     def populate_treeview(data):
         for item in tree.get_children():
             tree.delete(item)
@@ -72,20 +67,18 @@ def display_drivers_in_table():
                 driver.get("Durum", "Bilinmiyor"),
                 "Sürücüyü araştır" if driver.get("Sürücü Linki") != "Bilinmiyor" else "Bilinmiyor"
             ))
-            # Durum rengine göre arka planı ayarla
+       
             if driver.get("Durum") == "Yüklü":
                 tree.item(item_id, tags=("yuklu",))
             else:
                 tree.item(item_id, tags=("yuklu_degil",))
 
-    # Tag stilleri ekleme
     tree.tag_configure("yuklu", background="lightgreen")
     tree.tag_configure("yuklu_degil", background="lightcoral")
 
     populate_treeview(drivers)
     tree.pack(expand=True, fill="both")
 
-    # Arama işlevi
     def search_drivers(event=None):
         query = search_entry.get().lower()
         filtered_drivers = [
@@ -102,7 +95,6 @@ def display_drivers_in_table():
     search_button = tk.Button(search_frame, text="Ara", command=search_drivers)
     search_button.pack(side="left", padx=5)
 
-    # Sürücü Linki hücresine çift tıklandığında Google'da arama yapma
     def on_treeview_double_click(event):
         item = tree.selection()[0]
         device_name = tree.item(item, "values")[0]
